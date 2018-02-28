@@ -1,0 +1,13 @@
+[Unit]
+Description=Music on Console MPRIS bridge
+Requires=dbus.service ssh-agent.service
+After=dbus.service ssh-agent.service
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/moc-mpris/moc_mpris.sh %I
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target
