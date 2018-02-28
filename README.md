@@ -3,12 +3,12 @@
 ## Install
 
 ```
-# mkdir -p "${pkgdir}/usr/lib/systemd/user/"
-# mkdir -p "${pkgdir}/usr/lib/moc-mpris/"
+# mkdir -p /usr/lib/systemd/user/
+# mkdir -p /usr/lib/moc-mpris/
 
-# install -D *.service "${pkgdir}/usr/lib/systemd/user/"
-# install -D *.sh "${pkgdir}/usr/lib/moc-mpris/"
-# install -D *.py "${pkgdir}/usr/lib/moc-mpris/"
+# install -D *.service /usr/lib/systemd/user/
+# install -D *.sh /usr/lib/moc-mpris/
+# install -D *.py /usr/lib/moc-mpris/
 ```
 
 Arch Linux users might want to install `moc-mpris-git` from AUR instead.
