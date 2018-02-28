@@ -18,6 +18,7 @@ import time
 import copy
 import musicbrainzngs
 import os
+import pdb
 
 BUS_NAME = 'org.mpris.MediaPlayer2.moc_mpris'
 OBJECT_PATH = '/org/mpris/MediaPlayer2'
@@ -28,7 +29,8 @@ PLAYLISTS_IFACE = 'org.mpris.MediaPlayer2.Playlists'
 
 musicbrainzngs.set_useragent("MOCP MPRIS bridge", "0.1", "http://github.com/progwolff/moc-mpris")
 
-class Mocp(dbus.service.Object, remote=None):
+class Mocp(dbus.service.Object):
+    
     
     properties = None
     
@@ -38,14 +40,16 @@ class Mocp(dbus.service.Object, remote=None):
 
     connected = False
     
-    remote_user = remote.split('@')[0]
-    remote_address = remote.split('@')[-1]
     
-    is_remote = False if remote_address else True
-    remote_user = remote_user if remote_user else ''
-    remote_name = remote_address if remote_address else 'local'
+    def __init__(self, *args, **kwargs):
+        
+        remote = kwargs.get('remote', None)
+        
+        self.remote_user = remote.split('@')[0] if remote else None
+        self.remote_address = remote.split('@')[-1] if remote else None
     
-    def __init__(self):
+        self.remote_name = self.remote_address if self.remote_address else 'local'
+        
         
         self.properties = {
             ROOT_IFACE: self._get_root_iface_properties(),
@@ -77,7 +81,7 @@ class Mocp(dbus.service.Object, remote=None):
             'CanRaise': (True, None),
             # NOTE Change if adding optional track list support
             'HasTrackList': (False, None),
-            'Identity': ('MOC ({})'.format(remote_name), None),
+            'Identity': ('MOC ({})'.format(self.remote_name), None),
             #'DesktopEntry': ('moc_mpris', None),
         }
 
@@ -466,8 +470,9 @@ class Mocp(dbus.service.Object, remote=None):
         
         try:
             print(args)
-            if self.remote_address:
-                if self.remote_user:
+            print('{}@{}'.format(self.remote_user,self.remote_address))
+            if self.remote_address is not None:
+                if self.remote_user is not None:
                     return check_output(['ssh', '{}@{}'.format(self.remote_user,self.remote_address), 'mocp'] + args, stderr=STDOUT).decode('utf-8')
                 else:
                    return check_output(['ssh', '{}'.format(self.remote_address), 'mocp'] + args, stderr=STDOUT).decode('utf-8') 
@@ -480,8 +485,8 @@ class Mocp(dbus.service.Object, remote=None):
     def alsa_get_volume_cmd(self):
         
         try:
-            if self.remote_address:
-                if self.remote_user:
+            if self.remote_address is not None:
+                if self.remote_user is not None:
                     alsainfo = check_output(['ssh', '{}@{}'.format(self.remote_user,self.remote_address), 'amixer', 'get', 'Digital'], stderr=STDOUT).decode('utf-8')
                 else:
                     alsainfo = check_output(['ssh', '{}'.format(self.remote_address), 'amixer', 'get', 'Digital'], stderr=STDOUT).decode('utf-8')
@@ -514,7 +519,7 @@ def main():
     DBusGMainLoop(set_as_default=True)
 
     remote = None if len(sys.argv) < 2 else sys.argv[1]
-    Mocp(sys.argv[1]).run()
+    Mocp(remote=remote).run()
 
 if __name__ == '__main__':
     sys.exit(main())
