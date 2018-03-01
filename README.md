@@ -22,7 +22,7 @@ $ systemctl enable --user --now moc_mpris.service
 To enable MPRIS2 support for remote instances of MOC:
 
 ```
-$ systemctl enable --user --now moc_mpris.service@'user@remote'
+$ systemctl enable --user --now moc_mpris@'user@remote'
 ```
 
 You will need to set up a password-less ssh connection to the remote for this to work (e.g. by using a RSA key, adding the key's password to your wallet, and calling `ssh-add` at startup).
