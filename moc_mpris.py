@@ -124,7 +124,7 @@ class Mocp(dbus.service.Object):
     
         if int(self.current_time) < int(time.time()):
             if prop in ['Position']:
-                self.mocp_update(PLAYER_IFACE)
+                self.mocp_update(PLAYER_IFACE, skipPosition=True)
             self.current_time = time.time()
     
         (getter, _) = self.properties[interface][prop]
@@ -407,7 +407,7 @@ class Mocp(dbus.service.Object):
         # NOTE This could be a setting for the end user to change.
         return True
     
-    def mocp_update(self, interface):
+    def mocp_update(self, interface, skipPosition=False):
         
         if not self.update_mocp_info():
             sys.exit(0)
@@ -429,7 +429,8 @@ class Mocp(dbus.service.Object):
                         print("{} == {}".format(self.oldinfo[key],getters[key]))
                         del ret[key]
         
-            del ret['Position']
+            if skipPosition:
+                del ret['Position']
         
             if len(ret.keys()) > 0:
                 self.PropertiesChanged(interface, ret, [])
