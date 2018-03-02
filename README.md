@@ -1,5 +1,7 @@
 # MPRIS2 bridge for MOC - music on console
 
+![Screenshot](./.screenshot.png)
+
 ## Install
 
 ```
