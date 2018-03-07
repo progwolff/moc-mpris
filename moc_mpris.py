@@ -12,7 +12,7 @@ import dbus.service
 from gi.repository import GLib
 import re
 import signal
-from subprocess import check_call, check_output, STDOUT, CalledProcessError
+from subprocess import check_call, check_output, Popen, STDOUT, CalledProcessError
 import sys
 import time
 import copy
@@ -507,12 +507,11 @@ class Mocp(dbus.service.Object):
             print(folder)
             if self.remote_address:
                 if self.remote_user:
-                    out = check_output(['ssh', '-X', '{}@{}'.format(self.remote_user,self.remote_address), "xterm -fg white -bg black -e mocp -m -O MusicDir='{}' ; sleep 10".format(folder)]).decode('utf-8')
+                    Popen(['ssh', '-X', '{}@{}'.format(self.remote_user,self.remote_address), "xterm -fg white -bg black -e mocp -m -O MusicDir='{}' ; sleep 10".format(folder)])
                 else:
-                    out = check_output(['ssh', '-X', '{}'.format(self.remote_address), "xterm -fg white -bg black -e mocp -m -O MusicDir='{}' ; sleep 10".format(folder)]).decode('utf-8')
+                    Popen(['ssh', '-X', '{}'.format(self.remote_address), "xterm -fg white -bg black -e mocp -m -O MusicDir='{}' ; sleep 10".format(folder)])
             else:
-                out = check_output(["xterm -fg white -bg black -e mocp -m -O MusicDir='{}' ; sleep 10".format(folder)]).decode('utf-8')
-            print(out)
+                Popen(["xterm -fg white -bg black -e mocp -m -O MusicDir='{}' ; sleep 10".format(folder)])
         except CalledProcessError as e:
             print(e)
 
