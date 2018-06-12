@@ -1,7 +1,7 @@
 [Unit]
 Description=Music on Console MPRIS bridge
-Requires=dbus.service ssh-agent.service
-After=dbus.service ssh-agent.service
+Requires=dbus.service
+After=dbus.service
 
 [Service]
 Type=simple
