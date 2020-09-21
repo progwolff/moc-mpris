@@ -8,9 +8,9 @@
 # mkdir -p /usr/lib/systemd/user/
 # mkdir -p /usr/lib/moc-mpris/
 
-# install -D *.service /usr/lib/systemd/user/
-# install -D *.sh /usr/lib/moc-mpris/
-# install -D *.py /usr/lib/moc-mpris/
+# install -D -m644 *.service /usr/lib/systemd/user/
+# install -D -m755 *.sh /usr/lib/moc-mpris/
+# install -D -m755 *.py /usr/lib/moc-mpris/
 ```
 
 Arch Linux users might want to install `moc-mpris-git` from AUR instead.
